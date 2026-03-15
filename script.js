@@ -69,85 +69,123 @@ document.getElementById("step2").style.display = "block";
 
 
 function validateString() {
-    // Correctly target the input ID
-    let input = document.getElementById("inputString").value;
+
+    let input = document.getElementById("inputString").value.trim();
     const error = document.getElementById("stringError");
 
     error.style.color = "red";
-    input = input.replace(/\s+/g, '');
 
+    // 1️⃣ Empty input
+    if(input === ""){
+        error.innerText = "Please enter a string.";
+        return;
+    }
+
+    // Remove spaces
+    input = input.replace(/\s+/g,'');
+
+    // 2️⃣ Invalid format (must be letter followed by number OR plain string)
+    if(!/^([ab]\d*)+$/.test(input)){
+        error.innerText = "Invalid format.";
+        return;
+    }
+
+    // Expand compressed form
     let expanded = expandString(input);
 
-    // Rule: |s| >= p
-    if (expanded.length < p) {
+    // 3️⃣ Length constraint
+    if(expanded.length < p){
         error.innerText = "String length must be ≥ p";
         return;
     }
 
-    // Validation for anbn
-    if (lang === "anbn") {
-        if (!/^[ab]+$/.test(expanded)) {
-            error.innerText = "Only a and b allowed";
+    // ========================
+    // LANGUAGE VALIDATIONS
+    // ========================
+
+    // 4️⃣ L = {aⁿbⁿ}
+    if(lang === "anbn"){
+
+        if(!/^[ab]+$/.test(expanded)){
+            error.innerText = "Only 'a' and 'b' allowed.";
             return;
         }
-        if (!checkAnBn(expanded)) {
-            error.innerText = "String must follow aⁿ bⁿ";
+
+        if(!/^a+b+$/.test(expanded)){
+            error.innerText = "String must have all a's before b's.";
+            return;
+        }
+
+        if(!checkAnBn(expanded)){
+            error.innerText = "Number of a's must equal number of b's.";
             return;
         }
     }
 
-    // Validation for aprime
-    if (lang === "aprime") {
-        if (!/^a+$/.test(expanded)) {
-            error.innerText = "Only 'a' allowed in this language";
+    // 5️⃣ L = {aⁿ | n prime}
+    if(lang === "aprime"){
+
+        if(!/^a+$/.test(expanded)){
+            error.innerText = "Only 'a' allowed in this language.";
             return;
         }
-        if (!isPrime(expanded.length)) {
-            error.innerText = "Length must be a prime number";
+
+        if(!isPrime(expanded.length)){
+            error.innerText = "Length must be a prime number.";
             return;
         }
     }
 
-    if (lang === "square") {
+    // 6️⃣ L = {aⁿ bⁿ²}
+    if(lang === "square"){
 
-    if(!/^[ab]+$/.test(expanded)){
-        error.innerText = "Only a and b allowed"
-        return
+        if(!/^[ab]+$/.test(expanded)){
+            error.innerText = "Only 'a' and 'b' allowed.";
+            return;
+        }
+
+        if(!/^a+b+$/.test(expanded)){
+            error.innerText = "All a's must come before b's.";
+            return;
+        }
+
+        let aCount = (expanded.match(/^a+/) || [""])[0].length;
+        let bCount = (expanded.match(/b+$/) || [""])[0].length;
+
+        if(bCount !== aCount * aCount){
+            error.innerText = `Number of b's must equal a² (${aCount*aCount}).`;
+            return;
+        }
     }
 
-    let aCount = (expanded.match(/^a+/) || [""])[0].length
-    let bCount = (expanded.match(/b+$/) || [""])[0].length
+    // 7️⃣ L = {aⁿ b aⁿ}
+    if(lang === "aba"){
 
-    if(bCount !== aCount * aCount){
-        error.innerText = "Must satisfy b = a²"
-        return
+        if(!/^[ab]+$/.test(expanded)){
+            error.innerText = "Only 'a' and 'b' allowed.";
+            return;
+        }
+
+        let match = expanded.match(/^a+b+a+$/);
+
+        if(!match){
+            error.innerText = "String must follow pattern aⁿ b aⁿ.";
+            return;
+        }
+
+        let left = expanded.match(/^a+/)[0].length;
+        let right = expanded.match(/a+$/)[0].length;
+
+        if(left !== right){
+            error.innerText = "Number of a's before and after b must match.";
+            return;
+        }
     }
-}
 
-if (lang === "aba") {
+    // ========================
+    // SUCCESS CASE
+    // ========================
 
-    if(!/^[ab]+$/.test(expanded)){
-        error.innerText = "Only a and b allowed"
-        return
-    }
-
-    let match = expanded.match(/^a+b+a+$/)
-
-    if(!match){
-        error.innerText = "Must follow aⁿbaⁿ"
-        return
-    }
-
-    let left = expanded.match(/^a+/)[0].length
-    let right = expanded.match(/a+$/)[0].length
-
-    if(left !== right){
-        error.innerText = "Both sides of b must have equal a's"
-        return
-    }
-}
-
-    // If it passes validation
     error.style.color = "green";
     error.innerText = "Valid string ✔";
 
@@ -316,15 +354,23 @@ let explanation = ""
 
 if(lang === "anbn"){
 
-let aCount = (str.match(/^a+/) || [""])[0].length
-let bCount = (str.match(/b+$/) || [""])[0].length
+let aCount = (str.match(/a/g) || []).length
+let bCount = (str.match(/b/g) || []).length
 
 if(checkAnBn(str)){
 stillInLanguage = true
 }
 else{
+
+if(!/^a+b+$/.test(str)){
 explanation =
-`Analysis: ${aCount} a's, ${bCount} b's (should be equal).`
+`Analysis: the pumped string breaks the structure aⁿbⁿ because 'a' appears after 'b'.`
+}
+else{
+explanation =
+`Analysis: ${aCount} a's and ${bCount} b's (they must be equal in aⁿbⁿ).`
+}
+
 }
 
 }
