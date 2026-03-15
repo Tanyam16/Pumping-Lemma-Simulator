@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<title>Pumping Lemma Visualizer</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Choose a Language to Test</h1>
+
+<p class="description">
+Select a language to test if it's regular using the Pumping Lemma.
+You'll try to find a string that breaks the rules!
+</p>
+
+
+<div class="language-card">
+
+<div class="language-info">
+<h3>L = { aⁿ bⁿ | n ≥ 0 }</h3>
+<p>Strings with equal numbers of 'a's and 'b's (e.g., aabb).</p>
+</div>
+
+<button onclick="openSimulator('anbn')">Test</button>
+
+</div>
+
+
+
+<div class="language-card">
+
+<div class="language-info">
+<h3>L = { aⁿ | n is prime }</h3>
+<p>Strings of 'a's whose length is prime.</p>
+</div>
+
+<button onclick="openSimulator('aprime')">Test</button>
+
+</div>
+
+
+<div class="language-card">
+
+<div class="language-info">
+<h3>L = { aⁿ bⁿ² }</h3>
+<p>Strings with a's followed by b's, where #b = (#a)².</p>
+</div>
+
+<button onclick="openSimulator('square')">Test</button>
+
+</div>
+
+
+<div class="language-card">
+
+<div class="language-info">
+<h3>L = { aⁿ b aⁿ }</h3>
+<p>Strings with a's, one b, then same number of a's.</p>
+</div>
+
+<button onclick="openSimulator('aba')">Test</button>
+
+</div>
+
+
+</div>
+
+
+<script src="script.js"></script>
+<script>
+function selectLang(language){
+    localStorage.setItem("selectedLanguage", language)
+    window.location.href = "simulator.html"
+}
+</script>
+
+</body>
+
+</html>

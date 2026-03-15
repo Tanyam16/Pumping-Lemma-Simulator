@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<title>Pumping Lemma Simulator</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+<div class="container">
+
+<h1>Pumping Lemma Simulator</h1>
+
+<h3 id="languageTitle"></h3>
+
+<p id="alphabetText"></p>
+
+<p>
+Use the
+<a href="https://en.wikipedia.org/wiki/Pumping_lemma_for_regular_languages" target="_blank">
+Pumping Lemma
+</a>
+to find a contradiction.
+</p>
+
+
+<h2>Step 1: Choose Pumping Length (p)</h2>
+
+<input id="pValue" type="number" placeholder="Enter number between 4 and 12">
+
+<button onclick="validateP()">Confirm</button>
+
+<div id="pError" class="error"></div>
+
+
+<div id="step2" style="display:none;">
+
+<h2>Step 2: Enter String</h2>
+
+<input id="inputString" type = "text">
+
+<button onclick="validateString()">Validate String</button>
+
+<div id="stringError" class="error"></div>
+
+</div>
+
+<div id="step3" style="display:none;">
+
+<h2>Step 3: Split String into x, y, z</h2>
+
+<div id="visualString"></div>
+
+<div class="slider-container">
+<label>x end</label>
+<input type="range" id="xSlider" min="0" value="0">
+</div>
+
+<div class="slider-container">
+<label>y end</label>
+<input type="range" id="ySlider" min="0" value="1">
+</div>
+
+<div id="splitError" class="error"></div>
+
+<div id="xyzValues" style="margin-top:20px;">
+<p><b>x = </b><span id="xVal"></span></p>
+<p><b>y = </b><span id="yVal"></span></p>
+<p><b>z = </b><span id="zVal"></span></p>
+</div>
+
+</div>
+
+<div id="step4" style="display:none; margin-top:30px;">
+
+<h2>Step 4: Repeat y</h2>
+
+<label>Enter a number (i) to repeat y</label>
+
+<input id="iValue" type="number" placeholder="e.g., 2">
+
+<button onclick="testPumping()">Test String</button>
+
+<div id="pumpError" class="error"></div>
+
+<div id="pumpResult" style="margin-top:15px;"></div>
+
+
+</div>
+
+<script src="script.js"></script>
+
+<!-- <script>
+
+const lang = localStorage.getItem("selectedLanguage") || "anbn";
+
+const title = document.getElementById("languageTitle");
+const alphabet = document.getElementById("alphabetText");
+const inputPlaceholder = document.getElementById("inputString");
+
+// Ensure steps are hidden on fresh load
+document.getElementById("step2").style.display = "none";
+document.getElementById("step3").style.display = "none";
+document.getElementById("step4").style.display = "none";
+
+// Update UI based on what was clicked in index.html
+if (lang === "anbn") {
+    title.innerText = "L = { aⁿ bⁿ | n ≥ 0 }";
+    alphabet.innerText = "Alphabet Σ = {a, b}";
+    inputPlaceholder.placeholder = "Example: a5b5";
+} else if (lang === "aprime") {
+    title.innerText = "L = { aⁿ | n is prime }";
+    alphabet.innerText = "Alphabet Σ = {a}";
+    inputPlaceholder.placeholder = "Example: a7";
+} else if (lang === "square") {
+    title.innerText = "L = { aⁿ bⁿ² }";
+    alphabet.innerText = "Alphabet Σ = {a, b}";
+    inputPlaceholder.placeholder = "Example: a3b9";
+} else if (lang === "aba") {
+    title.innerText = "L = { aⁿ b aⁿ }";
+    alphabet.innerText = "Alphabet Σ = {a, b}";
+    inputPlaceholder.placeholder = "Example: a4ba4";
+}
+</script> -->
+</body>
+
+</html>
